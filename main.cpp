@@ -2,20 +2,17 @@
 
 using namespace std;
 
-int main()
+void login(string u, string p)
 {
-    string username;
-    string password;
-    cout << "LOGIN" << endl;
     bool band = false;
     int i = 0;
     while (band == false)
     {
         cout << "Usuario: ";
-        cin >> username;
+        cin >> u;
         cout << "Clave: ";
-        cin >> password;
-        if (username == "benjamha" and password == "1525")
+        cin >> p;
+        if (u == "benjamha" and p == "1525")
         {
             cout << "INICIO DE SESION CORRECTO";
             band = true;
@@ -32,4 +29,13 @@ int main()
             abort();
         }
     }
+}
+
+int main()
+{
+    string username;
+    string password;
+    cout << "LOGIN" << endl;
+    login(username, password);
+    return 0;
 }
