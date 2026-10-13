@@ -15,7 +15,7 @@ bool login()
         cin >> u;
         cout << "Clave: ";
         cin >> p;
-        if (u == "benjamha" && p == "1525")
+        if (u == "benjamha" && p == "1234")
         {
             cout << "INICIO DE SESION CORRECTO" << endl;
             return true;
@@ -39,6 +39,7 @@ int main()
     vector<string> tasksPastE;
     vector<string> tasksPastC;
     vector<string> tasksPastM;
+    vector<string> historialGeneral;
     string newTask;
     int op;
     while (true)
@@ -78,10 +79,10 @@ int main()
                     cout << i + 1 << ". " << tasks[i] << endl;
                 }
                 cout << "=====================================" << endl;
-                cout << "Presiona Enter para volver al menu" << endl;
-                cin.ignore();
-                cin.get();
             }
+            cout << "Presiona Enter para volver al menu" << endl;
+            cin.ignore();
+            cin.get();
         }
         else if (op == 2)
         {
@@ -90,10 +91,10 @@ int main()
             cout << "Nueva tarea: ";
             getline(cin, newTask);
             tasks.push_back(newTask);
+            tasksPastC.push_back(newTask);
             cout << "Tarea añadida." << endl;
             cout << "=====================================" << endl;
             cout << "Presiona Enter para volver al menu" << endl;
-            cin.ignore();
             cin.get();
         }
         else if (op == 3)
@@ -186,7 +187,8 @@ int main()
                     if (posicion > 0 && posicion < tasks.size() + 1)
                     {
                         cout << "Ingrese la nueva tarea: ";
-                        cin >> newTask;
+                        cin.ignore();
+                        getline(cin, newTask);
                         char conf;
                         while (true)
                         {
@@ -223,6 +225,38 @@ int main()
         }
         else if (op == 5)
         {
+            if (tasksPastE.empty() && tasksPastM.empty() && tasksPastC.empty())
+            {
+                cout << "Historial vacio" << endl;
+            }
+            else
+            {
+                cout << "HISTORIAL" << endl;
+                if (!tasksPastE.empty())
+                {
+                    string status;
+                    for (int i = 0; i < tasksPastE.size(); i++)
+                    {
+                        cout << "[ELIMINADO] " << tasksPastE[i] << endl;
+                    }
+                }
+                if (!tasksPastM.empty())
+                {
+                    string status;
+                    for (int i = 0; i < tasksPastM.size(); i++)
+                    {
+                        cout << "[MODIFICADO] " << tasksPastM[i] << endl;
+                    }
+                }
+                if (!tasksPastC.empty())
+                {
+                    string status;
+                    for (int i = 0; i < tasksPastC.size(); i++)
+                    {
+                        cout << "[CREADA] " << tasksPastC[i] << endl;
+                    }
+                }
+            }
             cout << "Presiona Enter para volver al menu" << endl;
             cin.ignore();
             cin.get();
