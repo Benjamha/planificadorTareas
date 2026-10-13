@@ -36,7 +36,9 @@ int main()
         return 0;
     }
     vector<string> tasks;
-    vector<string> tasksPast;
+    vector<string> tasksPastE;
+    vector<string> tasksPastC;
+    vector<string> tasksPastM;
     string newTask;
     int op;
     while (true)
@@ -112,7 +114,7 @@ int main()
                         cin >> conf;
                         if (conf == 'y')
                         {
-                            tasksPast.push_back(tasks[posicion - 1]);
+                            tasksPastE.push_back(tasks[posicion - 1]);
                             tasks.erase(tasks.begin() + posicion - 1);
                             cout << "Tarea eliminada" << endl;
                         }
@@ -131,6 +133,42 @@ int main()
         }
         else if (op == 4)
         {
+            if (tasks.empty())
+            {
+                cout << "No hay tareas para modificar" << endl;
+            }
+            else
+            {
+                for (int i = 0; i < tasks.size(); i++)
+                {
+                    cout << i + 1 << ". " << tasks[i] << endl;
+                }
+                int posicion;
+                while (true)
+                {
+                    cout << "Escoge la tarea a modificar: ";
+                    cin >> posicion;
+                    if (posicion > 0 && posicion < tasks.size() + 1)
+                    {
+                        cout << "Ingrese la nueva tarea: ";
+                        cin >> newTask;
+                        char conf;
+                        cout << "¿Estas seguro? y/n: ";
+                        cin >> conf;
+                        if (conf == 'y')
+                        {
+                            tasksPastM.push_back(tasks[posicion - 1]);
+                            tasks[posicion - 1] = newTask;
+                            cout << "Tarea modificada" << endl;
+                        }
+                        break;
+                    }
+                    else
+                    {
+                        cout << "La tarea ingresada no existe" << endl;
+                    }
+                }
+            }
             cout << "Presiona Enter para volver al menu" << endl;
             cin.ignore();
             cin.get();
