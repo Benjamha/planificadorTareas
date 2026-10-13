@@ -1,42 +1,39 @@
 #include <iostream>
+#include <string>
 
 using namespace std;
 
-void login(string u, string p)
+bool login()
 {
-    bool band = false;
-    int i = 0;
+    string u;
+    string p;
     cout << "LOGIN" << endl;
-    while (band == false)
+    for (int i = 0; i < 3; i++)
     {
         cout << "Usuario: ";
         cin >> u;
         cout << "Clave: ";
         cin >> p;
-        if (u == "benjamha" and p == "1525")
+        if (u == "benjamha" && p == "1525")
         {
             cout << "INICIO DE SESION CORRECTO" << endl;
-            band = true;
+            return true;
         }
         else
         {
             cout << "Usuario/Clave incorrecto/s" << endl;
-            i++;
-        }
-
-        if (i == 3)
-        {
-            cout << "Limite de intentos alcanzado" << endl;
-            abort();
         }
     }
+    cout << "Limite de intentos alcanzado" << endl;
+    return false;
 }
 
 int main()
 {
-    string username;
-    string password;
-    login(username, password);
+    if (!login())
+    {
+        return 0;
+    }
     int op;
     while (true)
     {
