@@ -54,6 +54,13 @@ int main()
         cout << "=====================================" << endl;
         cout << "Ingresar opcion: ";
         cin >> op;
+        if (cin.fail())
+        {
+            cin.clear();
+            cin.ignore(10000, '\n');
+            cout << "Debes ingresar un numero valido" << endl;
+            continue;
+        }
         if (op == 1)
         {
             if (tasks.empty())
@@ -107,16 +114,37 @@ int main()
                 {
                     cout << "Escoge la tarea a eliminar: ";
                     cin >> posicion;
+                    if (cin.fail())
+                    {
+                        cin.clear();
+                        cin.ignore(10000, '\n');
+                        cout << "Debes ingresar un numero valido" << endl;
+                        continue;
+                    }
                     if (posicion > 0 && posicion < tasks.size() + 1)
                     {
                         char conf;
-                        cout << "¿Estas seguro? y/n: ";
-                        cin >> conf;
-                        if (conf == 'y')
+                        while (true)
                         {
-                            tasksPastE.push_back(tasks[posicion - 1]);
-                            tasks.erase(tasks.begin() + posicion - 1);
-                            cout << "Tarea eliminada" << endl;
+                            cout << "¿Estas seguro? y/n: ";
+                            cin >> conf;
+
+                            if (conf == 'y')
+                            {
+                                tasksPastE.push_back(tasks[posicion - 1]);
+                                tasks.erase(tasks.begin() + posicion - 1);
+                                cout << "Tarea eliminada" << endl;
+                                break;
+                            }
+                            else if (conf == 'n')
+                            {
+                                cout << "Eliminacion cancelada" << endl;
+                                break;
+                            }
+                            else
+                            {
+                                cout << "Ingrese 'y' como si o 'n' como no" << endl;
+                            }
                         }
                         break;
                     }
@@ -148,18 +176,38 @@ int main()
                 {
                     cout << "Escoge la tarea a modificar: ";
                     cin >> posicion;
+                    if (cin.fail())
+                    {
+                        cin.clear();
+                        cin.ignore(10000, '\n');
+                        cout << "Debes ingresar un numero valido" << endl;
+                        continue;
+                    }
                     if (posicion > 0 && posicion < tasks.size() + 1)
                     {
                         cout << "Ingrese la nueva tarea: ";
                         cin >> newTask;
                         char conf;
-                        cout << "¿Estas seguro? y/n: ";
-                        cin >> conf;
-                        if (conf == 'y')
+                        while (true)
                         {
-                            tasksPastM.push_back(tasks[posicion - 1]);
-                            tasks[posicion - 1] = newTask;
-                            cout << "Tarea modificada" << endl;
+                            cout << "¿Estas seguro? y/n: ";
+                            cin >> conf;
+                            if (conf == 'y')
+                            {
+                                tasksPastM.push_back(tasks[posicion - 1]);
+                                tasks[posicion - 1] = newTask;
+                                cout << "Tarea modificada" << endl;
+                                break;
+                            }
+                            else if (conf == 'n')
+                            {
+                                cout << "Modificacion cancelada" << endl;
+                                break;
+                            }
+                            else
+                            {
+                                cout << "Ingrese 'y' como si o 'n' como no" << endl;
+                            }
                         }
                         break;
                     }
