@@ -41,6 +41,7 @@ int main()
     int op;
     while (true)
     {
+        cout << "=====================================" << endl;
         cout << "PLANIFICADOR DE TAREAS" << endl;
         cout << "1. Ver Tareas" << endl;
         cout << "2. Crear Tarea" << endl;
@@ -48,21 +49,26 @@ int main()
         cout << "4. Modificar Tarea" << endl;
         cout << "5. Ver historial" << endl;
         cout << "6. Salir" << endl;
+        cout << "=====================================" << endl;
         cout << "Ingresar opcion: ";
         cin >> op;
         if (op == 1)
         {
             if (tasks.empty())
             {
+                cout << "=====================================" << endl;
                 cout << "No hay tareas pendientes" << endl;
+                cout << "=====================================" << endl;
             }
             else
             {
+                cout << "=====================================" << endl;
                 cout << "Listado de tareas:" << endl;
                 for (int i = 0; i < tasks.size(); i++)
                 {
                     cout << i + 1 << ". " << tasks[i] << endl;
                 }
+                cout << "=====================================" << endl;
                 cout << "Presiona Enter para volver al menu" << endl;
                 cin.ignore();
                 cin.get();
@@ -71,16 +77,54 @@ int main()
         else if (op == 2)
         {
             cin.ignore();
+            cout << "=====================================" << endl;
             cout << "Nueva tarea: ";
             getline(cin, newTask);
             tasks.push_back(newTask);
             cout << "Tarea añadida." << endl;
+            cout << "=====================================" << endl;
             cout << "Presiona Enter para volver al menu" << endl;
             cin.ignore();
             cin.get();
         }
         else if (op == 3)
         {
+            if (tasks.empty())
+            {
+                cout << "No hay tarea para eliminar" << endl;
+            }
+            else
+            {
+                for (int i = 0; i < tasks.size(); i++)
+                {
+                    cout << i + 1 << ". " << tasks[i] << endl;
+                }
+                int posicion;
+                cout << "=====================================" << endl;
+                while (true)
+                {
+                    cout << "Escoge la tarea a eliminar: ";
+                    cin >> posicion;
+                    if (posicion > 0 && posicion < tasks.size() + 1)
+                    {
+                        char conf;
+                        cout << "¿Estas seguro? y/n: ";
+                        cin >> conf;
+                        if (conf == 'y')
+                        {
+                            tasksPast.push_back(tasks[posicion - 1]);
+                            tasks.erase(tasks.begin() + posicion - 1);
+                            cout << "Tarea eliminada" << endl;
+                        }
+                        break;
+                    }
+                    else
+                    {
+                        cout << "La tarea ingresada no existe" << endl;
+                    }
+                }
+            }
+            cout << "=====================================" << endl;
             cout << "Presiona Enter para volver al menu" << endl;
             cin.ignore();
             cin.get();
