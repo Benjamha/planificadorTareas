@@ -54,6 +54,20 @@ void cargarLista(const string &archivo, vector<string> &lista)
     }
 }
 
+void guardarLista(const string &archivo, const vector<string> &lista)
+{
+    ofstream salida(archivo);
+    if (!salida.is_open())
+    {
+        cout << "No se pudo guardar " << archivo << endl;
+        return;
+    }
+    for (const string &el : lista)
+    {
+        salida << el << endl;
+    }
+}
+
 int validarOpcion(const string &mensaje)
 {
     int n;
