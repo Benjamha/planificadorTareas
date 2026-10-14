@@ -283,6 +283,8 @@ int main()
     }
     vector<string> tasks;
     vector<string> historial;
+    cargarLista("Tareas.txt", tasks);
+    cargarLista("Historial.txt", historial);
     bool salir = false;
     while (!salir)
     {
@@ -317,6 +319,8 @@ int main()
         default:
             cout << "Opcion no valida" << endl;
         }
+        guardarLista("Tareas.txt", tasks);
+        guardarLista("Historial.txt", historial);
     }
 
     return 0;
