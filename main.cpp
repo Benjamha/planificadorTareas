@@ -29,6 +29,210 @@ bool login()
     return false;
 }
 
+void verTareas(const vector<string> &lista)
+{
+    if (lista.empty())
+    {
+        cout << "=====================================" << endl;
+        cout << "No hay tareas pendientes" << endl;
+        cout << "=====================================" << endl;
+    }
+    else
+    {
+        cout << "=====================================" << endl;
+        cout << "Listado de tareas:" << endl;
+        for (int i = 0; i < lista.size(); i++)
+        {
+            cout << i + 1 << ". " << lista[i] << endl;
+        }
+        cout << "=====================================" << endl;
+    }
+    cout << "Presiona Enter para volver al menu" << endl;
+    cin.ignore();
+    cin.get();
+}
+
+void crearTarea(vector<string> &lista, string nuevaTarea, vector<string> &listaC)
+{
+    cin.ignore();
+    cout << "=====================================" << endl;
+    cout << "Nueva tarea: ";
+    getline(cin, nuevaTarea);
+    lista.push_back(nuevaTarea);
+    listaC.push_back(nuevaTarea);
+    cout << "Tarea añadida." << endl;
+    cout << "=====================================" << endl;
+    cout << "Presiona Enter para volver al menu" << endl;
+    cin.get();
+}
+
+void eliminarTarea(vector<string> &lista, vector<string> &listaE)
+{
+    if (lista.empty())
+    {
+        cout << "No hay tarea para eliminar" << endl;
+    }
+    else
+    {
+        for (int i = 0; i < lista.size(); i++)
+        {
+            cout << i + 1 << ". " << lista[i] << endl;
+        }
+        int posicion;
+        cout << "=====================================" << endl;
+        while (true)
+        {
+            cout << "Escoge la tarea a eliminar: ";
+            cin >> posicion;
+            if (cin.fail())
+            {
+                cin.clear();
+                cin.ignore(10000, '\n');
+                cout << "Debes ingresar un numero valido" << endl;
+                continue;
+            }
+            if (posicion > 0 && posicion < lista.size() + 1)
+            {
+                char conf;
+                while (true)
+                {
+                    cout << "¿Estas seguro? y/n: ";
+                    cin >> conf;
+
+                    if (conf == 'y')
+                    {
+                        listaE.push_back(lista[posicion - 1]);
+                        lista.erase(lista.begin() + posicion - 1);
+                        cout << "Tarea eliminada" << endl;
+                        break;
+                    }
+                    else if (conf == 'n')
+                    {
+                        cout << "Eliminacion cancelada" << endl;
+                        break;
+                    }
+                    else
+                    {
+                        cout << "Ingrese 'y' como si o 'n' como no" << endl;
+                    }
+                }
+                break;
+            }
+            else
+            {
+                cout << "La tarea ingresada no existe" << endl;
+            }
+        }
+    }
+    cout << "=====================================" << endl;
+    cout << "Presiona Enter para volver al menu" << endl;
+    cin.ignore();
+    cin.get();
+}
+
+void modificarTarea(vector<string> &lista, vector<string> &listaM, string nuevaTarea)
+{
+    if (lista.empty())
+    {
+        cout << "No hay tareas para modificar" << endl;
+    }
+    else
+    {
+        for (int i = 0; i < lista.size(); i++)
+        {
+            cout << i + 1 << ". " << lista[i] << endl;
+        }
+        int posicion;
+        while (true)
+        {
+            cout << "Escoge la tarea a modificar: ";
+            cin >> posicion;
+            if (cin.fail())
+            {
+                cin.clear();
+                cin.ignore(10000, '\n');
+                cout << "Debes ingresar un numero valido" << endl;
+                continue;
+            }
+            if (posicion > 0 && posicion < lista.size() + 1)
+            {
+                cout << "Ingrese la nueva tarea: ";
+                cin.ignore();
+                getline(cin, nuevaTarea);
+                char conf;
+                while (true)
+                {
+                    cout << "¿Estas seguro? y/n: ";
+                    cin >> conf;
+                    if (conf == 'y')
+                    {
+                        listaM.push_back(lista[posicion - 1]);
+                        lista[posicion - 1] = nuevaTarea;
+                        cout << "Tarea modificada" << endl;
+                        break;
+                    }
+                    else if (conf == 'n')
+                    {
+                        cout << "Modificacion cancelada" << endl;
+                        break;
+                    }
+                    else
+                    {
+                        cout << "Ingrese 'y' como si o 'n' como no" << endl;
+                    }
+                }
+                break;
+            }
+            else
+            {
+                cout << "La tarea ingresada no existe" << endl;
+            }
+        }
+    }
+    cout << "Presiona Enter para volver al menu" << endl;
+    cin.ignore();
+    cin.get();
+}
+
+void verHistorial(const vector<string> &lista, const vector<string> &listaC, const vector<string> &listaE, const vector<string> &listaM)
+{
+    if (listaE.empty() && listaM.empty() && listaC.empty())
+    {
+        cout << "Historial vacio" << endl;
+    }
+    else
+    {
+        cout << "HISTORIAL" << endl;
+        if (!listaE.empty())
+        {
+            string status;
+            for (int i = 0; i < listaE.size(); i++)
+            {
+                cout << "[ELIMINADO] " << listaE[i] << endl;
+            }
+        }
+        if (!listaM.empty())
+        {
+            string status;
+            for (int i = 0; i < listaM.size(); i++)
+            {
+                cout << "[MODIFICADO] " << listaM[i] << endl;
+            }
+        }
+        if (!listaC.empty())
+        {
+            string status;
+            for (int i = 0; i < listaC.size(); i++)
+            {
+                cout << "[CREADA] " << listaC[i] << endl;
+            }
+        }
+    }
+    cout << "Presiona Enter para volver al menu" << endl;
+    cin.ignore();
+    cin.get();
+}
+
 int main()
 {
     if (!login())
@@ -64,202 +268,23 @@ int main()
         }
         if (op == 1)
         {
-            if (tasks.empty())
-            {
-                cout << "=====================================" << endl;
-                cout << "No hay tareas pendientes" << endl;
-                cout << "=====================================" << endl;
-            }
-            else
-            {
-                cout << "=====================================" << endl;
-                cout << "Listado de tareas:" << endl;
-                for (int i = 0; i < tasks.size(); i++)
-                {
-                    cout << i + 1 << ". " << tasks[i] << endl;
-                }
-                cout << "=====================================" << endl;
-            }
-            cout << "Presiona Enter para volver al menu" << endl;
-            cin.ignore();
-            cin.get();
+            verTareas(tasks);
         }
         else if (op == 2)
         {
-            cin.ignore();
-            cout << "=====================================" << endl;
-            cout << "Nueva tarea: ";
-            getline(cin, newTask);
-            tasks.push_back(newTask);
-            tasksPastC.push_back(newTask);
-            cout << "Tarea añadida." << endl;
-            cout << "=====================================" << endl;
-            cout << "Presiona Enter para volver al menu" << endl;
-            cin.get();
+            crearTarea(tasks, newTask, tasksPastC);
         }
         else if (op == 3)
         {
-            if (tasks.empty())
-            {
-                cout << "No hay tarea para eliminar" << endl;
-            }
-            else
-            {
-                for (int i = 0; i < tasks.size(); i++)
-                {
-                    cout << i + 1 << ". " << tasks[i] << endl;
-                }
-                int posicion;
-                cout << "=====================================" << endl;
-                while (true)
-                {
-                    cout << "Escoge la tarea a eliminar: ";
-                    cin >> posicion;
-                    if (cin.fail())
-                    {
-                        cin.clear();
-                        cin.ignore(10000, '\n');
-                        cout << "Debes ingresar un numero valido" << endl;
-                        continue;
-                    }
-                    if (posicion > 0 && posicion < tasks.size() + 1)
-                    {
-                        char conf;
-                        while (true)
-                        {
-                            cout << "¿Estas seguro? y/n: ";
-                            cin >> conf;
-
-                            if (conf == 'y')
-                            {
-                                tasksPastE.push_back(tasks[posicion - 1]);
-                                tasks.erase(tasks.begin() + posicion - 1);
-                                cout << "Tarea eliminada" << endl;
-                                break;
-                            }
-                            else if (conf == 'n')
-                            {
-                                cout << "Eliminacion cancelada" << endl;
-                                break;
-                            }
-                            else
-                            {
-                                cout << "Ingrese 'y' como si o 'n' como no" << endl;
-                            }
-                        }
-                        break;
-                    }
-                    else
-                    {
-                        cout << "La tarea ingresada no existe" << endl;
-                    }
-                }
-            }
-            cout << "=====================================" << endl;
-            cout << "Presiona Enter para volver al menu" << endl;
-            cin.ignore();
-            cin.get();
+            eliminarTarea(tasks, tasksPastE);
         }
         else if (op == 4)
         {
-            if (tasks.empty())
-            {
-                cout << "No hay tareas para modificar" << endl;
-            }
-            else
-            {
-                for (int i = 0; i < tasks.size(); i++)
-                {
-                    cout << i + 1 << ". " << tasks[i] << endl;
-                }
-                int posicion;
-                while (true)
-                {
-                    cout << "Escoge la tarea a modificar: ";
-                    cin >> posicion;
-                    if (cin.fail())
-                    {
-                        cin.clear();
-                        cin.ignore(10000, '\n');
-                        cout << "Debes ingresar un numero valido" << endl;
-                        continue;
-                    }
-                    if (posicion > 0 && posicion < tasks.size() + 1)
-                    {
-                        cout << "Ingrese la nueva tarea: ";
-                        cin.ignore();
-                        getline(cin, newTask);
-                        char conf;
-                        while (true)
-                        {
-                            cout << "¿Estas seguro? y/n: ";
-                            cin >> conf;
-                            if (conf == 'y')
-                            {
-                                tasksPastM.push_back(tasks[posicion - 1]);
-                                tasks[posicion - 1] = newTask;
-                                cout << "Tarea modificada" << endl;
-                                break;
-                            }
-                            else if (conf == 'n')
-                            {
-                                cout << "Modificacion cancelada" << endl;
-                                break;
-                            }
-                            else
-                            {
-                                cout << "Ingrese 'y' como si o 'n' como no" << endl;
-                            }
-                        }
-                        break;
-                    }
-                    else
-                    {
-                        cout << "La tarea ingresada no existe" << endl;
-                    }
-                }
-            }
-            cout << "Presiona Enter para volver al menu" << endl;
-            cin.ignore();
-            cin.get();
+            modificarTarea(tasks, tasksPastE, newTask);
         }
         else if (op == 5)
         {
-            if (tasksPastE.empty() && tasksPastM.empty() && tasksPastC.empty())
-            {
-                cout << "Historial vacio" << endl;
-            }
-            else
-            {
-                cout << "HISTORIAL" << endl;
-                if (!tasksPastE.empty())
-                {
-                    string status;
-                    for (int i = 0; i < tasksPastE.size(); i++)
-                    {
-                        cout << "[ELIMINADO] " << tasksPastE[i] << endl;
-                    }
-                }
-                if (!tasksPastM.empty())
-                {
-                    string status;
-                    for (int i = 0; i < tasksPastM.size(); i++)
-                    {
-                        cout << "[MODIFICADO] " << tasksPastM[i] << endl;
-                    }
-                }
-                if (!tasksPastC.empty())
-                {
-                    string status;
-                    for (int i = 0; i < tasksPastC.size(); i++)
-                    {
-                        cout << "[CREADA] " << tasksPastC[i] << endl;
-                    }
-                }
-            }
-            cout << "Presiona Enter para volver al menu" << endl;
-            cin.ignore();
-            cin.get();
+            verHistorial(tasks, tasksPastC, tasksPastE, tasksPastM);
         }
         else if (op == 6)
         {
