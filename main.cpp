@@ -75,6 +75,7 @@ bool confirmar()
     {
         cout << "¿Estas seguro? y/n: ";
         cin >> conf;
+        cin.ignore(10000, '\n');
         conf = tolower(conf);
         if (conf == 'y')
         {
