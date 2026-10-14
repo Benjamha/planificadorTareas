@@ -6,6 +6,12 @@
 
 using namespace std;
 
+struct Tarea
+{
+    string titulo;
+    bool completada = false;
+};
+
 bool login()
 {
     string u;
