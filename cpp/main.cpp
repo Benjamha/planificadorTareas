@@ -37,6 +37,23 @@ void pausa()
     cin.get();
 }
 
+void cargarLista(const string &archivo, vector<string> &lista)
+{
+    ifstream entrada(archivo);
+    if (!entrada.is_open())
+    {
+        return;
+    }
+    string l;
+    while (getline(entrada, l))
+    {
+        if ((!l.empty()))
+        {
+            lista.push_back(l);
+        }
+    }
+}
+
 int validarOpcion(const string &mensaje)
 {
     int n;
