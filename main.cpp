@@ -1,6 +1,7 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <cctype>
 
 using namespace std;
 
@@ -29,6 +30,12 @@ bool login()
     return false;
 }
 
+void pausa()
+{
+    cout << "Presiona Enter para regresar al menu" << endl;
+    cin.get();
+}
+
 int validarOpcion(const string &mensaje)
 {
     int n;
@@ -48,6 +55,19 @@ int validarOpcion(const string &mensaje)
     }
 }
 
+bool tarea_enBlanco(string tarea)
+{
+    if (tarea.empty())
+    {
+        cout << "Tarea en blanco, no creada" << endl;
+        return false;
+    }
+    else
+    {
+        return true;
+    }
+}
+
 bool confirmar()
 {
     char conf;
@@ -55,6 +75,7 @@ bool confirmar()
     {
         cout << "¿Estas seguro? y/n: ";
         cin >> conf;
+        conf = tolower(conf);
         if (conf == 'y')
         {
             return true;
@@ -88,7 +109,7 @@ void verTareas(const vector<string> &lista)
         }
         cout << "=====================================" << endl;
     }
-    cout << "Presiona Enter para volver al menu" << endl;
+    pausa();
 }
 
 void crearTarea(vector<string> &lista, vector<string> &listaC)
@@ -97,12 +118,14 @@ void crearTarea(vector<string> &lista, vector<string> &listaC)
     cout << "=====================================" << endl;
     cout << "Nueva tarea: ";
     getline(cin, nuevaTarea);
-    lista.push_back(nuevaTarea);
-    listaC.push_back("[CREADO] " + nuevaTarea);
-    cout << "Tarea añadida." << endl;
-    cout << "=====================================" << endl;
-    cout << "Presiona Enter para volver al menu" << endl;
-    cin.get();
+    if (tarea_enBlanco(nuevaTarea))
+    {
+        lista.push_back(nuevaTarea);
+        listaC.push_back("[CREADO] " + nuevaTarea);
+        cout << "Tarea añadida." << endl;
+        cout << "=====================================" << endl;
+    }
+    pausa();
 }
 
 void eliminarTarea(vector<string> &lista, vector<string> &listaE)
@@ -142,7 +165,7 @@ void eliminarTarea(vector<string> &lista, vector<string> &listaE)
         }
     }
     cout << "=====================================" << endl;
-    cout << "Presiona Enter para volver al menu" << endl;
+    pausa();
 }
 
 void modificarTarea(vector<string> &lista, vector<string> &listaM)
@@ -164,19 +187,21 @@ void modificarTarea(vector<string> &lista, vector<string> &listaM)
             if (posicion > 0 && posicion < lista.size() + 1)
             {
                 cout << "Ingrese la nueva tarea: ";
-                cin.ignore();
                 getline(cin, nuevaTarea);
-                if (confirmar())
+                if (tarea_enBlanco(nuevaTarea))
                 {
-                    listaM.push_back("[MODIFICADO] " + lista[posicion - 1] + " -> " + nuevaTarea);
-                    lista[posicion - 1] = nuevaTarea;
-                    cout << "Tarea modificada" << endl;
+                    if (confirmar())
+                    {
+                        listaM.push_back("[MODIFICADO] " + lista[posicion - 1] + " -> " + nuevaTarea);
+                        lista[posicion - 1] = nuevaTarea;
+                        cout << "Tarea modificada" << endl;
+                    }
+                    else
+                    {
+                        cout << "Modificacion cancelada" << endl;
+                    }
+                    break;
                 }
-                else
-                {
-                    cout << "Modificacion cancelada" << endl;
-                }
-                break;
             }
             else
             {
@@ -184,7 +209,7 @@ void modificarTarea(vector<string> &lista, vector<string> &listaM)
             }
         }
     }
-    cout << "Presiona Enter para volver al menu" << endl;
+    pausa();
 }
 
 void verHistorial(const vector<string> &listaH)
@@ -201,7 +226,7 @@ void verHistorial(const vector<string> &listaH)
             cout << listaH[i] << endl;
         }
     }
-    cout << "Presiona Enter para volver al menu" << endl;
+    pausa();
 }
 
 void menu()
