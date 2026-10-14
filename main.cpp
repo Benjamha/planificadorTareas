@@ -52,14 +52,15 @@ void verTareas(const vector<string> &lista)
     cin.get();
 }
 
-void crearTarea(vector<string> &lista, string nuevaTarea, vector<string> &listaC)
+void crearTarea(vector<string> &lista, vector<string> &listaC)
 {
     cin.ignore();
+    string nuevaTarea;
     cout << "=====================================" << endl;
     cout << "Nueva tarea: ";
     getline(cin, nuevaTarea);
     lista.push_back(nuevaTarea);
-    listaC.push_back(nuevaTarea);
+    listaC.push_back("[CREADO] " + nuevaTarea);
     cout << "Tarea añadida." << endl;
     cout << "=====================================" << endl;
     cout << "Presiona Enter para volver al menu" << endl;
@@ -101,7 +102,7 @@ void eliminarTarea(vector<string> &lista, vector<string> &listaE)
 
                     if (conf == 'y')
                     {
-                        listaE.push_back(lista[posicion - 1]);
+                        listaE.push_back("[ELIMINADO] " + lista[posicion - 1]);
                         lista.erase(lista.begin() + posicion - 1);
                         cout << "Tarea eliminada" << endl;
                         break;
@@ -130,8 +131,9 @@ void eliminarTarea(vector<string> &lista, vector<string> &listaE)
     cin.get();
 }
 
-void modificarTarea(vector<string> &lista, vector<string> &listaM, string nuevaTarea)
+void modificarTarea(vector<string> &lista, vector<string> &listaM)
 {
+    string nuevaTarea;
     if (lista.empty())
     {
         cout << "No hay tareas para modificar" << endl;
@@ -166,7 +168,7 @@ void modificarTarea(vector<string> &lista, vector<string> &listaM, string nuevaT
                     cin >> conf;
                     if (conf == 'y')
                     {
-                        listaM.push_back(lista[posicion - 1]);
+                        listaM.push_back("[MODIFICADO] " + lista[posicion - 1] + " -> " + nuevaTarea);
                         lista[posicion - 1] = nuevaTarea;
                         cout << "Tarea modificada" << endl;
                         break;
@@ -194,43 +196,36 @@ void modificarTarea(vector<string> &lista, vector<string> &listaM, string nuevaT
     cin.get();
 }
 
-void verHistorial(const vector<string> &lista, const vector<string> &listaC, const vector<string> &listaE, const vector<string> &listaM)
+void verHistorial(const vector<string> &listaH)
 {
-    if (listaE.empty() && listaM.empty() && listaC.empty())
+    if (listaH.empty())
     {
         cout << "Historial vacio" << endl;
     }
     else
     {
         cout << "HISTORIAL" << endl;
-        if (!listaE.empty())
+        for (int i = 0; i < listaH.size(); i++)
         {
-            string status;
-            for (int i = 0; i < listaE.size(); i++)
-            {
-                cout << "[ELIMINADO] " << listaE[i] << endl;
-            }
-        }
-        if (!listaM.empty())
-        {
-            string status;
-            for (int i = 0; i < listaM.size(); i++)
-            {
-                cout << "[MODIFICADO] " << listaM[i] << endl;
-            }
-        }
-        if (!listaC.empty())
-        {
-            string status;
-            for (int i = 0; i < listaC.size(); i++)
-            {
-                cout << "[CREADA] " << listaC[i] << endl;
-            }
+            cout << listaH[i] << endl;
         }
     }
     cout << "Presiona Enter para volver al menu" << endl;
     cin.ignore();
     cin.get();
+}
+
+void menu()
+{
+    cout << "=====================================" << endl;
+    cout << "PLANIFICADOR DE TAREAS" << endl;
+    cout << "1. Ver Tareas" << endl;
+    cout << "2. Crear Tarea" << endl;
+    cout << "3. Eliminar tarea" << endl;
+    cout << "4. Modificar Tarea" << endl;
+    cout << "5. Ver historial" << endl;
+    cout << "6. Salir" << endl;
+    cout << "=====================================" << endl;
 }
 
 int main()
@@ -240,23 +235,12 @@ int main()
         return 0;
     }
     vector<string> tasks;
-    vector<string> tasksPastE;
-    vector<string> tasksPastC;
-    vector<string> tasksPastM;
-    vector<string> historialGeneral;
-    string newTask;
-    int op;
-    while (true)
+    vector<string> historial;
+    bool salir = false;
+    while (!salir)
     {
-        cout << "=====================================" << endl;
-        cout << "PLANIFICADOR DE TAREAS" << endl;
-        cout << "1. Ver Tareas" << endl;
-        cout << "2. Crear Tarea" << endl;
-        cout << "3. Eliminar tarea" << endl;
-        cout << "4. Modificar Tarea" << endl;
-        cout << "5. Ver historial" << endl;
-        cout << "6. Salir" << endl;
-        cout << "=====================================" << endl;
+        int op;
+        menu();
         cout << "Ingresar opcion: ";
         cin >> op;
         if (cin.fail())
@@ -266,32 +250,33 @@ int main()
             cout << "Debes ingresar un numero valido" << endl;
             continue;
         }
-        if (op == 1)
+        switch (op)
         {
+        case 1:
             verTareas(tasks);
-        }
-        else if (op == 2)
-        {
-            crearTarea(tasks, newTask, tasksPastC);
-        }
-        else if (op == 3)
-        {
-            eliminarTarea(tasks, tasksPastE);
-        }
-        else if (op == 4)
-        {
-            modificarTarea(tasks, tasksPastE, newTask);
-        }
-        else if (op == 5)
-        {
-            verHistorial(tasks, tasksPastC, tasksPastE, tasksPastM);
-        }
-        else if (op == 6)
-        {
             break;
-        }
-        else
-        {
+
+        case 2:
+            crearTarea(tasks, historial);
+            break;
+
+        case 3:
+            eliminarTarea(tasks, historial);
+            break;
+
+        case 4:
+            modificarTarea(tasks, historial);
+            break;
+
+        case 5:
+            verHistorial(historial);
+            break;
+
+        case 6:
+            salir = true;
+            break;
+
+        default:
             cout << "Opcion no valida" << endl;
         }
     }
