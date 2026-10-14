@@ -29,6 +29,47 @@ bool login()
     return false;
 }
 
+int validarOpcion(const string &mensaje)
+{
+    int n;
+    while (true)
+    {
+        cout << mensaje;
+        cin >> n;
+        if (cin.fail())
+        {
+            cin.clear();
+            cin.ignore(10000, '\n');
+            cout << "Debes ingresar un numero valido" << endl;
+            continue;
+        }
+        cin.ignore(10000, '\n');
+        return n;
+    }
+}
+
+bool confirmar()
+{
+    char conf;
+    while (true)
+    {
+        cout << "¿Estas seguro? y/n: ";
+        cin >> conf;
+        if (conf == 'y')
+        {
+            return true;
+        }
+        else if (conf == 'n')
+        {
+            return false;
+        }
+        else
+        {
+            cout << "Ingrese 'y' como si o 'n' como no" << endl;
+        }
+    }
+}
+
 void verTareas(const vector<string> &lista)
 {
     if (lista.empty())
@@ -48,13 +89,10 @@ void verTareas(const vector<string> &lista)
         cout << "=====================================" << endl;
     }
     cout << "Presiona Enter para volver al menu" << endl;
-    cin.ignore();
-    cin.get();
 }
 
 void crearTarea(vector<string> &lista, vector<string> &listaC)
 {
-    cin.ignore();
     string nuevaTarea;
     cout << "=====================================" << endl;
     cout << "Nueva tarea: ";
@@ -79,43 +117,21 @@ void eliminarTarea(vector<string> &lista, vector<string> &listaE)
         {
             cout << i + 1 << ". " << lista[i] << endl;
         }
-        int posicion;
         cout << "=====================================" << endl;
         while (true)
         {
-            cout << "Escoge la tarea a eliminar: ";
-            cin >> posicion;
-            if (cin.fail())
-            {
-                cin.clear();
-                cin.ignore(10000, '\n');
-                cout << "Debes ingresar un numero valido" << endl;
-                continue;
-            }
+            int posicion = validarOpcion("Escoge la tarea a eliminar: ");
             if (posicion > 0 && posicion < lista.size() + 1)
             {
-                char conf;
-                while (true)
+                if (confirmar())
                 {
-                    cout << "¿Estas seguro? y/n: ";
-                    cin >> conf;
-
-                    if (conf == 'y')
-                    {
-                        listaE.push_back("[ELIMINADO] " + lista[posicion - 1]);
-                        lista.erase(lista.begin() + posicion - 1);
-                        cout << "Tarea eliminada" << endl;
-                        break;
-                    }
-                    else if (conf == 'n')
-                    {
-                        cout << "Eliminacion cancelada" << endl;
-                        break;
-                    }
-                    else
-                    {
-                        cout << "Ingrese 'y' como si o 'n' como no" << endl;
-                    }
+                    listaE.push_back("[ELIMINADO] " + lista[posicion - 1]);
+                    lista.erase(lista.begin() + posicion - 1);
+                    cout << "Tarea eliminada" << endl;
+                }
+                else
+                {
+                    cout << "Eliminacion cancelada" << endl;
                 }
                 break;
             }
@@ -127,8 +143,6 @@ void eliminarTarea(vector<string> &lista, vector<string> &listaE)
     }
     cout << "=====================================" << endl;
     cout << "Presiona Enter para volver al menu" << endl;
-    cin.ignore();
-    cin.get();
 }
 
 void modificarTarea(vector<string> &lista, vector<string> &listaM)
@@ -144,44 +158,23 @@ void modificarTarea(vector<string> &lista, vector<string> &listaM)
         {
             cout << i + 1 << ". " << lista[i] << endl;
         }
-        int posicion;
         while (true)
         {
-            cout << "Escoge la tarea a modificar: ";
-            cin >> posicion;
-            if (cin.fail())
-            {
-                cin.clear();
-                cin.ignore(10000, '\n');
-                cout << "Debes ingresar un numero valido" << endl;
-                continue;
-            }
+            int posicion = validarOpcion("Escoge la tarea a modificar: ");
             if (posicion > 0 && posicion < lista.size() + 1)
             {
                 cout << "Ingrese la nueva tarea: ";
                 cin.ignore();
                 getline(cin, nuevaTarea);
-                char conf;
-                while (true)
+                if (confirmar())
                 {
-                    cout << "¿Estas seguro? y/n: ";
-                    cin >> conf;
-                    if (conf == 'y')
-                    {
-                        listaM.push_back("[MODIFICADO] " + lista[posicion - 1] + " -> " + nuevaTarea);
-                        lista[posicion - 1] = nuevaTarea;
-                        cout << "Tarea modificada" << endl;
-                        break;
-                    }
-                    else if (conf == 'n')
-                    {
-                        cout << "Modificacion cancelada" << endl;
-                        break;
-                    }
-                    else
-                    {
-                        cout << "Ingrese 'y' como si o 'n' como no" << endl;
-                    }
+                    listaM.push_back("[MODIFICADO] " + lista[posicion - 1] + " -> " + nuevaTarea);
+                    lista[posicion - 1] = nuevaTarea;
+                    cout << "Tarea modificada" << endl;
+                }
+                else
+                {
+                    cout << "Modificacion cancelada" << endl;
                 }
                 break;
             }
@@ -192,8 +185,6 @@ void modificarTarea(vector<string> &lista, vector<string> &listaM)
         }
     }
     cout << "Presiona Enter para volver al menu" << endl;
-    cin.ignore();
-    cin.get();
 }
 
 void verHistorial(const vector<string> &listaH)
@@ -211,8 +202,6 @@ void verHistorial(const vector<string> &listaH)
         }
     }
     cout << "Presiona Enter para volver al menu" << endl;
-    cin.ignore();
-    cin.get();
 }
 
 void menu()
@@ -239,17 +228,8 @@ int main()
     bool salir = false;
     while (!salir)
     {
-        int op;
         menu();
-        cout << "Ingresar opcion: ";
-        cin >> op;
-        if (cin.fail())
-        {
-            cin.clear();
-            cin.ignore(10000, '\n');
-            cout << "Debes ingresar un numero valido" << endl;
-            continue;
-        }
+        int op = validarOpcion("Ingresa una opcion: ");
         switch (op)
         {
         case 1:
