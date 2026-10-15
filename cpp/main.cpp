@@ -10,6 +10,7 @@ struct Tarea
 {
     string titulo;
     bool completada = false;
+    int prioridad = 1;
 };
 
 bool login()
@@ -43,6 +44,36 @@ void pausa()
     cin.get();
 }
 
+void cargarTarea(const string &archivo, vector<Tarea> &lista)
+{
+    ifstream entrada(archivo);
+    if (!entrada.is_open())
+    {
+        return;
+    }
+    Tarea t;
+    while (entrada >> t.completada >> t.prioridad)
+    {
+        entrada.ignore();
+        getline(entrada, t.titulo);
+        lista.push_back(t);
+    }
+}
+
+void guardarTarea(const string &archivo, const vector<Tarea> &lista)
+{
+    ofstream salida(archivo);
+    if (!salida.is_open())
+    {
+        cout << "No se pudo guardar " << archivo << endl;
+        return;
+    }
+    for (const Tarea &t : lista)
+    {
+        salida << t.completada << " " << t.prioridad << " " << t.titulo << endl;
+    }
+}
+
 void cargarLista(const string &archivo, vector<string> &lista)
 {
     ifstream entrada(archivo);
@@ -50,12 +81,12 @@ void cargarLista(const string &archivo, vector<string> &lista)
     {
         return;
     }
-    string l;
-    while (getline(entrada, l))
+    string linea;
+    while (getline(entrada, linea))
     {
-        if ((!l.empty()))
+        if (!linea.empty())
         {
-            lista.push_back(l);
+            lista.push_back(linea);
         }
     }
 }
@@ -68,9 +99,9 @@ void guardarLista(const string &archivo, const vector<string> &lista)
         cout << "No se pudo guardar " << archivo << endl;
         return;
     }
-    for (const string &el : lista)
+    for (const string &elemento : lista)
     {
-        salida << el << endl;
+        salida << elemento << endl;
     }
 }
 
@@ -130,7 +161,7 @@ bool confirmar()
     }
 }
 
-void verTareas(const vector<string> &lista)
+void verTareas(const vector<Tarea> &lista)
 {
     if (lista.empty())
     {
@@ -144,14 +175,14 @@ void verTareas(const vector<string> &lista)
         cout << "Listado de tareas:" << endl;
         for (int i = 0; i < lista.size(); i++)
         {
-            cout << i + 1 << ". " << lista[i] << endl;
+            cout << i + 1 << ". " << lista[i].titulo << endl;
         }
         cout << "=====================================" << endl;
     }
     pausa();
 }
 
-void crearTarea(vector<string> &lista, vector<string> &listaC)
+void crearTarea(vector<Tarea> &lista, vector<string> &listaC)
 {
     string nuevaTarea;
     cout << "=====================================" << endl;
@@ -159,7 +190,9 @@ void crearTarea(vector<string> &lista, vector<string> &listaC)
     getline(cin, nuevaTarea);
     if (tarea_enBlanco(nuevaTarea))
     {
-        lista.push_back(nuevaTarea);
+        Tarea t;
+        t.titulo = nuevaTarea;
+        lista.push_back(t);
         listaC.push_back("[CREADO] " + nuevaTarea);
         cout << "Tarea añadida." << endl;
         cout << "=====================================" << endl;
@@ -167,7 +200,7 @@ void crearTarea(vector<string> &lista, vector<string> &listaC)
     pausa();
 }
 
-void eliminarTarea(vector<string> &lista, vector<string> &listaE)
+void eliminarTarea(vector<Tarea> &lista, vector<string> &listaE)
 {
     if (lista.empty())
     {
@@ -177,7 +210,7 @@ void eliminarTarea(vector<string> &lista, vector<string> &listaE)
     {
         for (int i = 0; i < lista.size(); i++)
         {
-            cout << i + 1 << ". " << lista[i] << endl;
+            cout << i + 1 << ". " << lista[i].titulo << endl;
         }
         cout << "=====================================" << endl;
         while (true)
@@ -187,7 +220,7 @@ void eliminarTarea(vector<string> &lista, vector<string> &listaE)
             {
                 if (confirmar())
                 {
-                    listaE.push_back("[ELIMINADO] " + lista[posicion - 1]);
+                    listaE.push_back("[ELIMINADO] " + lista[posicion - 1].titulo);
                     lista.erase(lista.begin() + posicion - 1);
                     cout << "Tarea eliminada" << endl;
                 }
@@ -207,7 +240,7 @@ void eliminarTarea(vector<string> &lista, vector<string> &listaE)
     pausa();
 }
 
-void modificarTarea(vector<string> &lista, vector<string> &listaM)
+void modificarTarea(vector<Tarea> &lista, vector<string> &listaM)
 {
     string nuevaTarea;
     if (lista.empty())
@@ -218,7 +251,7 @@ void modificarTarea(vector<string> &lista, vector<string> &listaM)
     {
         for (int i = 0; i < lista.size(); i++)
         {
-            cout << i + 1 << ". " << lista[i] << endl;
+            cout << i + 1 << ". " << lista[i].titulo << endl;
         }
         while (true)
         {
@@ -231,8 +264,8 @@ void modificarTarea(vector<string> &lista, vector<string> &listaM)
                 {
                     if (confirmar())
                     {
-                        listaM.push_back("[MODIFICADO] " + lista[posicion - 1] + " -> " + nuevaTarea);
-                        lista[posicion - 1] = nuevaTarea;
+                        listaM.push_back("[MODIFICADO] " + lista[posicion - 1].titulo + " -> " + nuevaTarea);
+                        lista[posicion - 1].titulo = nuevaTarea;
                         cout << "Tarea modificada" << endl;
                     }
                     else
@@ -287,9 +320,9 @@ int main()
     {
         return 0;
     }
-    vector<string> tasks;
+    vector<Tarea> tasks;
     vector<string> historial;
-    cargarLista("Tareas.txt", tasks);
+    cargarTarea("Tareas.txt", tasks);
     cargarLista("Historial.txt", historial);
     bool salir = false;
     while (!salir)
@@ -325,7 +358,7 @@ int main()
         default:
             cout << "Opcion no valida" << endl;
         }
-        guardarLista("Tareas.txt", tasks);
+        guardarTarea("Tareas.txt", tasks);
         guardarLista("Historial.txt", historial);
     }
 
