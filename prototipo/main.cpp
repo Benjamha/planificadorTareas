@@ -161,19 +161,34 @@ bool confirmar()
     }
 }
 
-string prioridad(int p)
+string nombrePrioridad(int p)
 {
     if (p == 3)
     {
-        cout << "Alta";
+        return "Alta";
     }
     else if (p == 2)
     {
-        cout << "Media";
+        return "Media";
     }
     else
     {
-        cout << "Baja";
+        return "Baja";
+    }
+}
+
+int asignarPrioridad()
+{
+    while (true)
+    {
+        int p;
+        cout << "Asignar prioridad (1 = Baja, 2 = Media, 3 = Alta): )";
+        cin >> p;
+        if (p >= 1 && p <= 3)
+        {
+            return p;
+        }
+        cout << "La prioridad puede ser unicamente de 1, 2 o 3" << endl;
     }
 }
 
@@ -191,7 +206,7 @@ void verTareas(const vector<Tarea> &lista)
         cout << "Listado de tareas:" << endl;
         for (int i = 0; i < lista.size(); i++)
         {
-            cout << i + 1 << ". [" << (lista[i].completada ? "x" : " ") << "] " << lista[i].titulo << endl;
+            cout << i + 1 << ". [" << (lista[i].completada ? "x" : " ") << "] (" << nombrePrioridad(lista[i].prioridad) << ") " << lista[i].titulo << endl;
         }
         cout << "=====================================" << endl;
     }
@@ -208,6 +223,7 @@ void crearTarea(vector<Tarea> &lista, vector<string> &listaC)
     {
         Tarea t;
         t.titulo = nuevaTarea;
+        t.prioridad = asignarPrioridad();
         lista.push_back(t);
         listaC.push_back("[CREADO] " + nuevaTarea);
         cout << "Tarea añadida." << endl;
