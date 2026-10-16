@@ -161,6 +161,22 @@ bool confirmar()
     }
 }
 
+string prioridad(int p)
+{
+    if (p == 3)
+    {
+        cout << "Alta";
+    }
+    else if (p == 2)
+    {
+        cout << "Media";
+    }
+    else
+    {
+        cout << "Baja";
+    }
+}
+
 void verTareas(const vector<Tarea> &lista)
 {
     if (lista.empty())
