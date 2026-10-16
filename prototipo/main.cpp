@@ -192,6 +192,42 @@ int asignarPrioridad()
     }
 }
 
+void cambiarPrioridad(vector<Tarea> &lista, vector<string> &listaH)
+{
+    if (lista.empty())
+    {
+        cout << "No hay tareas para cambiar su prioridad" << endl;
+    }
+    else
+    {
+        for (int i = 0; i < lista.size(); i++)
+        {
+            cout << i + 1 << ". [" << (lista[i].completada ? "x" : " ") << "] (" << nombrePrioridad(lista[i].prioridad) << ") " << lista[i].titulo << endl;
+        }
+        cout << "=====================================" << endl;
+        while (true)
+        {
+            int posicion;
+            cout << "Ingrese la tarea a la que quiere cambiar prioridad: ";
+            cin >> posicion;
+            if (posicion > 0 && posicion < lista.size() + 1)
+            {
+                string anterior = nombrePrioridad(lista[posicion - 1].prioridad);
+                lista[posicion - 1].prioridad = asignarPrioridad();
+                string nueva = nombrePrioridad(lista[posicion - 1].prioridad);
+                listaH.push_back("[PRIORIDAD] " + lista[posicion - 1].titulo + ": " + anterior + " -> " + nueva);
+                cout << "Prioridad actualizada" << endl;
+                break;
+            }
+            else
+            {
+                cout << "La tarea ingreasada no existe" << endl;
+            }
+        }
+    }
+    pausa();
+}
+
 void verTareas(const vector<Tarea> &lista)
 {
     if (lista.empty())
@@ -384,7 +420,8 @@ void menu()
     cout << "4. Modificar Tarea" << endl;
     cout << "5. Ver historial" << endl;
     cout << "6. Marcar tarea como completada" << endl;
-    cout << "7. Salir" << endl;
+    cout << "7. Cambiar prioridad" << endl;
+    cout << "8. Salir" << endl;
     cout << "=====================================" << endl;
 }
 
@@ -430,6 +467,10 @@ int main()
             break;
 
         case 7:
+            cambiarPrioridad(tasks, historial);
+            break;
+
+        case 8:
             salir = true;
             break;
 
