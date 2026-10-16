@@ -124,17 +124,17 @@ int validarOpcion(const string &mensaje)
     }
 }
 
-bool tarea_enBlanco(string tarea)
+bool tituloValido(const string &titulo)
 {
-    if (tarea.empty())
+    for (char c : titulo)
     {
-        cout << "Tarea en blanco, no creada" << endl;
-        return false;
+        if (!isspace(static_cast<unsigned char>(c)))
+        {
+            return true;
+        }
     }
-    else
-    {
-        return true;
-    }
+    cout << "El titulo ingresado no es valido. Comprueba que no este vacio ni que tenga solo espacios" << endl;
+    return false;
 }
 
 bool confirmar()
@@ -188,7 +188,7 @@ void crearTarea(vector<Tarea> &lista, vector<string> &listaC)
     cout << "=====================================" << endl;
     cout << "Nueva tarea: ";
     getline(cin, nuevaTarea);
-    if (tarea_enBlanco(nuevaTarea))
+    if (tituloValido(nuevaTarea))
     {
         Tarea t;
         t.titulo = nuevaTarea;
@@ -260,7 +260,7 @@ void modificarTarea(vector<Tarea> &lista, vector<string> &listaM)
             {
                 cout << "Ingrese la nueva tarea: ";
                 getline(cin, nuevaTarea);
-                if (tarea_enBlanco(nuevaTarea))
+                if (tituloValido(nuevaTarea))
                 {
                     if (confirmar())
                     {
