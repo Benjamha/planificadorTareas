@@ -175,7 +175,7 @@ void verTareas(const vector<Tarea> &lista)
         cout << "Listado de tareas:" << endl;
         for (int i = 0; i < lista.size(); i++)
         {
-            cout << i + 1 << ". " << lista[i].titulo << endl;
+            cout << i + 1 << ". [" << (lista[i].completada ? "x" : " ") << "] " << lista[i].titulo << endl;
         }
         cout << "=====================================" << endl;
     }
@@ -284,6 +284,47 @@ void modificarTarea(vector<Tarea> &lista, vector<string> &listaM)
     pausa();
 }
 
+void completarTarea(vector<Tarea> &lista, vector<string> &listaH)
+{
+    if (lista.empty())
+    {
+        cout << "No existen tareas. Crea una para comenzar a interactuar" << endl;
+    }
+    else
+    {
+        for (int i = 0; i < lista.size(); i++)
+        {
+            cout << i + 1 << ". [" << (lista[i].completada ? "x" : " ") << "] " << lista[i].titulo << endl;
+        }
+        cout << "=====================================" << endl;
+        while (true)
+        {
+            int posicion;
+            cout << "Escoge tarea completada: ";
+            cin >> posicion;
+            if (posicion > 0 && posicion < lista.size() + 1)
+            {
+                if (lista[posicion - 1].completada)
+                {
+                    cout << "La tarea seleccionada ya esta completada" << endl;
+                }
+                else
+                {
+                    lista[posicion - 1].completada = true;
+                    listaH.push_back("[COMPLETADO] " + lista[posicion - 1].titulo);
+                    cout << "Tarea completada" << endl;
+                }
+                break;
+            }
+            else
+            {
+                cout << "La tarea ingreada no existe" << endl;
+            }
+        }
+    }
+    pausa();
+}
+
 void verHistorial(const vector<string> &listaH)
 {
     if (listaH.empty())
@@ -310,7 +351,8 @@ void menu()
     cout << "3. Eliminar tarea" << endl;
     cout << "4. Modificar Tarea" << endl;
     cout << "5. Ver historial" << endl;
-    cout << "6. Salir" << endl;
+    cout << "6. Marcar tarea como completada" << endl;
+    cout << "7. Salir" << endl;
     cout << "=====================================" << endl;
 }
 
@@ -352,6 +394,10 @@ int main()
             break;
 
         case 6:
+            completarTarea(tasks, historial);
+            break;
+
+        case 7:
             salir = true;
             break;
 
