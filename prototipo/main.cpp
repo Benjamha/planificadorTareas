@@ -181,9 +181,7 @@ int asignarPrioridad()
 {
     while (true)
     {
-        int p;
-        cout << "Asignar prioridad (1 = Baja, 2 = Media, 3 = Alta): )";
-        cin >> p;
+        int p = validarOpcion("Asignar prioridad (1 = Baja, 2 = Media, 3 = Alta): ");
         if (p >= 1 && p <= 3)
         {
             return p;
@@ -207,17 +205,23 @@ void cambiarPrioridad(vector<Tarea> &lista, vector<string> &listaH)
         cout << "=====================================" << endl;
         while (true)
         {
-            int posicion;
-            cout << "Ingrese la tarea a la que quiere cambiar prioridad: ";
-            cin >> posicion;
+            int posicion = validarOpcion("Ingrese la tarea a la que quiere cambiar prioridad: ");
             if (posicion > 0 && posicion < lista.size() + 1)
             {
+
                 string anterior = nombrePrioridad(lista[posicion - 1].prioridad);
                 lista[posicion - 1].prioridad = asignarPrioridad();
-                string nueva = nombrePrioridad(lista[posicion - 1].prioridad);
-                listaH.push_back("[PRIORIDAD] " + lista[posicion - 1].titulo + ": " + anterior + " -> " + nueva);
-                cout << "Prioridad actualizada" << endl;
-                break;
+                if (confirmar())
+                {
+                    string nueva = nombrePrioridad(lista[posicion - 1].prioridad);
+                    listaH.push_back("[PRIORIDAD] " + lista[posicion - 1].titulo + ": " + anterior + " -> " + nueva);
+                    cout << "Prioridad actualizada" << endl;
+                    break;
+                }
+                else
+                {
+                    cout << "Cambio de prioridad cancelado" << endl;
+                }
             }
             else
             {
@@ -367,9 +371,7 @@ void completarTarea(vector<Tarea> &lista, vector<string> &listaH)
         cout << "=====================================" << endl;
         while (true)
         {
-            int posicion;
-            cout << "Escoge tarea completada: ";
-            cin >> posicion;
+            int posicion = validarOpcion("Escoge tarea completada: ");
             if (posicion > 0 && posicion < lista.size() + 1)
             {
                 if (lista[posicion - 1].completada)
@@ -378,9 +380,12 @@ void completarTarea(vector<Tarea> &lista, vector<string> &listaH)
                 }
                 else
                 {
-                    lista[posicion - 1].completada = true;
-                    listaH.push_back("[COMPLETADO] " + lista[posicion - 1].titulo);
-                    cout << "Tarea completada" << endl;
+                    if (confirmar())
+                    {
+                        lista[posicion - 1].completada = true;
+                        listaH.push_back("[COMPLETADO] " + lista[posicion - 1].titulo);
+                        cout << "Tarea completada" << endl;
+                    }
                 }
                 break;
             }
