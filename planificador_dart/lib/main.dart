@@ -36,22 +36,25 @@ void cargarTarea(String archivo, List<Tarea> lista) {
   if (!arch.existsSync()) {
     return;
   }
-  String contenido = arch.readAsStringSync();
-  List<String> tokens = contenido
-      .split(RegExp(r'\s+'))
-      .where((t) => t.isEmpty)
-      .toList();
-  int i = 0;
-  while (i + 1 < tokens.length) {
-    Tarea t = Tarea(titulo: '');
-    t.completada = tokens[i] == '1' || tokens[i].toLowerCase() == 'true';
-    i++;
-    t.prioridad = int.tryParse(tokens[i]) ?? 0;
-    i++;
-    if (i < tokens.length) {
-      t.titulo = tokens[i];
-      i++;
+  List<String> lineas = arch.readAsLinesSync();
+  for (String linea in lineas) {
+    String lineaLimpia = linea.trim();
+    if (lineaLimpia.isEmpty) {
+      continue;
     }
-    lista.add(t);
+    List<String> partes = lineaLimpia.split(RegExp(r'\s+'));
+    if (partes.length >= 3) {
+      bool completada = partes[0] == '1' || partes[0].toLowerCase() == 'true';
+      int prioridad = int.tryParse(partes[1]) ?? 0;
+      String titulo = partes.sublist(2).join(' ');
+      Tarea t = Tarea(
+        titulo: titulo,
+        completada: completada,
+        prioridad: prioridad,
+      );
+      lista.add(t);
+    }
   }
 }
+
+void guardarTarea(String archivo, List<Tarea> lista) {}
