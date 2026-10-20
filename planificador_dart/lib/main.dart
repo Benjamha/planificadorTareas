@@ -25,3 +25,8 @@ bool login() {
   print('Limite de intentos alcanzado');
   return false;
 }
+
+void pausa() {
+  stdout.write('Presiona Enter para regresar al menu');
+  stdin.readLineSync();
+}
