@@ -351,7 +351,7 @@ void menu() {
   print("5. Ver historial");
   print("6. Marcar tarea como completada");
   print("7. Cambiar prioridad");
-  print("Salir");
+  print("8. Salir");
   print("=====================================");
 }
 
