@@ -354,3 +354,56 @@ void menu() {
   print("Salir");
   print("=====================================");
 }
+
+void main() {
+  if (!login()) {
+    exit(0);
+  }
+  List<Tarea> tasks = [];
+  List<String> historial = [];
+  cargarTarea("Tareas.txt", tasks);
+  cargarLista("Historial.txt", historial);
+  bool salir = false;
+  while (!salir) {
+    menu();
+    int op = validarOpcion("Ingrese una opcion: ");
+    switch (op) {
+      case 1:
+        verTareas(tasks);
+        break;
+
+      case 2:
+        crearTarea(tasks, historial);
+        break;
+
+      case 3:
+        eliminarTarea(tasks, historial);
+        break;
+
+      case 4:
+        modificarTarea(tasks, historial);
+        break;
+
+      case 5:
+        verHistorial(historial);
+        break;
+
+      case 6:
+        completarTarea(tasks, historial);
+        break;
+
+      case 7:
+        cambiarPrioridad(tasks, historial);
+        break;
+
+      case 8:
+        salir = true;
+        break;
+
+      default:
+        print("Opcion no valida");
+    }
+    guardarTarea("Tareas.txt", tasks);
+    guardarLista("Historial.txt", historial);
+  }
+}
