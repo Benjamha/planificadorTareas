@@ -71,3 +71,29 @@ void guardarTarea(String archivo, List<Tarea> lista) {
     print("No se pudo guardar $archivo");
   }
 }
+
+void cargarLista(String archivo, List<String> lista) {
+  final arch = File(archivo);
+  if (!arch.existsSync()) {
+    return;
+  }
+  List<String> lineas = arch.readAsLinesSync();
+  for (String linea in lineas) {
+    if (linea.trim().isNotEmpty) {
+      lista.add(linea);
+    }
+  }
+}
+
+void guardarLista(String archivo, List<String> lista) {
+  try {
+    final arch = File(archivo);
+    final buffer = StringBuffer();
+    for (var el in lista) {
+      buffer.writeln(el);
+    }
+    arch.writeAsStringSync(buffer.toString());
+  } catch (e) {
+    print("No se pudo guardar $archivo");
+  }
+}
