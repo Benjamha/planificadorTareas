@@ -328,3 +328,29 @@ void completarTarea(List<Tarea> lista, List<String> listaH) {
   }
   pausa();
 }
+
+void verHistorial(List<String> listaH) {
+  if (listaH.isEmpty) {
+    print("Historial vacio");
+  } else {
+    print("HISTORIAL");
+    for (int i = 0; i < listaH.length; i++) {
+      print(listaH[i]);
+    }
+  }
+  pausa();
+}
+
+void menu() {
+  print("=====================================");
+  print("PLANIFICADOR DE TAREAS");
+  print("1. Ver Tareas");
+  print("2. Crear Tarea");
+  print("3. Eliminar Tarea");
+  print("4. Modificar Tarea");
+  print("5. Ver historial");
+  print("6. Marcar tarea como completada");
+  print("7. Cambiar prioridad");
+  print("Salir");
+  print("=====================================");
+}
