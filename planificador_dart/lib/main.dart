@@ -97,3 +97,16 @@ void guardarLista(String archivo, List<String> lista) {
     print("No se pudo guardar $archivo");
   }
 }
+
+int validarOpcion(String mensaje) {
+  while (true) {
+    stdout.write(mensaje);
+    String entrada = stdin.readLineSync() ?? '';
+    int? n = int.tryParse(entrada);
+    if (n != null) {
+      return n;
+    } else {
+      print("Debes ingresar un numero valido");
+    }
+  }
+}
