@@ -57,4 +57,17 @@ void cargarTarea(String archivo, List<Tarea> lista) {
   }
 }
 
-void guardarTarea(String archivo, List<Tarea> lista) {}
+void guardarTarea(String archivo, List<Tarea> lista) {
+  try {
+    final arch = File(archivo);
+    final buffer = StringBuffer();
+    for (var t in lista) {
+      int compInt = t.completada ? 1 : 0;
+      buffer.writeln("$compInt ${t.prioridad} ${t.titulo}");
+    }
+
+    arch.writeAsStringSync(buffer.toString());
+  } catch (e) {
+    print("No se pudo guardar $archivo");
+  }
+}
