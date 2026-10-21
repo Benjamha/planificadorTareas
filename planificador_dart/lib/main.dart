@@ -110,3 +110,221 @@ int validarOpcion(String mensaje) {
     }
   }
 }
+
+bool tituloValido(String titulo) {
+  if (titulo.trim().isNotEmpty) {
+    return true;
+  }
+  print("El titulo ingresado no es valido");
+  return false;
+}
+
+bool confirmar() {
+  while (true) {
+    stdout.write("¿Estas seguro? y/n");
+    String conf = stdin.readLineSync() ?? '';
+    if (conf.isEmpty) {
+      continue;
+    }
+    conf = conf.toLowerCase();
+    if (conf == "y") {
+      return true;
+    } else if (conf == "n") {
+      return false;
+    } else {
+      print("Ingresar 'y' como si o 'n' como no");
+    }
+  }
+}
+
+String nombrePrioridad(int p) {
+  if (p == 3) {
+    return "Alta";
+  } else if (p == 2) {
+    return "Media";
+  } else {
+    return "Baja";
+  }
+}
+
+int asignarPrioridad() {
+  while (true) {
+    int p = validarOpcion(
+      "Asignar prioridad (1 = Baja, 2 = Media, 3 = Alta): ",
+    );
+    if (p >= 1 && p <= 3) {
+      return p;
+    }
+    print("La prioridad puede ser unicamente de 1, 2 o 3");
+  }
+}
+
+void cambiarPrioridad(List<Tarea> lista, List<String> listaH) {
+  if (lista.isEmpty) {
+    print("No hay tareas para cambiar su prioridad");
+  } else {
+    for (int i = 0; i < lista.length; i++) {
+      String estado = lista[i].completada ? "x" : " ";
+      print(
+        "${i + 1}. [$estado] (${nombrePrioridad(lista[i].prioridad)}) ${lista[i].titulo}",
+      );
+    }
+    print("=====================================");
+    while (true) {
+      int posicion = validarOpcion(
+        "Ingrese tarea a la que quiera cambiar prioridad: ",
+      );
+      if (posicion > 0 && posicion < lista.length + 1) {
+        String anterior = nombrePrioridad(lista[posicion - 1].prioridad);
+        int nuevaPrioridad = asignarPrioridad();
+        if (confirmar()) {
+          lista[posicion - 1].prioridad = nuevaPrioridad;
+          String nueva = nombrePrioridad(lista[posicion - 1].prioridad);
+          listaH.add(
+            "[PRIORIDAD] ${lista[posicion - 1].titulo}: $anterior -> $nueva",
+          );
+          print("Prioridad actualizada");
+          break;
+        } else {
+          print("Cambio de prioridad cancelado");
+          break;
+        }
+      } else {
+        print("La tarea ingresada no existe");
+      }
+    }
+  }
+  pausa();
+}
+
+void verTareas(List<Tarea> lista) {
+  if (lista.isEmpty) {
+    print("=====================================");
+    print("No hay tareas pendientes");
+    print("=====================================");
+  } else {
+    print("=====================================");
+    print("Listado de tareas: ");
+    for (int i = 0; i < lista.length; i++) {
+      String estado = lista[i].completada ? "x" : " ";
+      print(
+        "${i + 1}. [$estado] (${nombrePrioridad(lista[i].prioridad)}) ${lista[i].titulo}",
+      );
+    }
+    print("=====================================");
+  }
+  pausa();
+}
+
+void crearTarea(List<Tarea> lista, List<String> listaC) {
+  print("=====================================");
+  stdout.write("Nueva tarea: ");
+  String nuevaTarea = stdin.readLineSync() ?? '';
+  if (tituloValido(nuevaTarea)) {
+    int prioridad = asignarPrioridad();
+    lista.add(Tarea(titulo: nuevaTarea, prioridad: prioridad));
+    listaC.add("[CREADO] $nuevaTarea");
+    print("Tarea añadida");
+    print("=====================================");
+  }
+  pausa();
+}
+
+void eliminarTarea(List<Tarea> lista, List<String> listaE) {
+  if (lista.isEmpty) {
+    print("No hay tareas para eliminar");
+  } else {
+    for (int i = 0; i < lista.length; i++) {
+      String estado = lista[i].completada ? "x" : " ";
+      print(
+        "${i + 1}. [$estado] (${nombrePrioridad(lista[i].prioridad)}) ${lista[i].titulo}",
+      );
+    }
+    print("=====================================");
+    while (true) {
+      int posicion = validarOpcion("Escoge la tarea a eliminar: ");
+      if (posicion > 0 && posicion < lista.length + 1) {
+        if (confirmar()) {
+          listaE.add("[ELIMINADO] ${lista[posicion - 1].titulo}");
+          lista.removeAt(posicion - 1);
+          print("Tarea eliminada");
+        } else {
+          print("Eliminacion cancelada");
+        }
+        break;
+      } else {
+        print("La tarea ingresada no existe");
+      }
+    }
+  }
+  print("=====================================");
+  pausa();
+}
+
+void modificarTarea(List<Tarea> lista, List<String> listaM) {
+  if (lista.isEmpty) {
+    print("No hay tareas para modificar");
+  } else {
+    for (int i = 0; i < lista.length; i++) {
+      String estado = lista[i].completada ? "x" : " ";
+      print(
+        "${i + 1}. [$estado] (${nombrePrioridad(lista[i].prioridad)}) ${lista[i].titulo}",
+      );
+    }
+    print("=====================================");
+    while (true) {
+      int posicion = validarOpcion("Escoge la tarea a modificar: ");
+      if (posicion > 0 && posicion < lista.length + 1) {
+        stdout.write("Ingrese la nueva tarea: ");
+        String nuevaTarea = stdin.readLineSync() ?? '';
+        if (tituloValido(nuevaTarea)) {
+          if (confirmar()) {
+            listaM.add(
+              "[MODIFICADO] ${lista[posicion - 1].titulo} -> $nuevaTarea",
+            );
+            lista[posicion - 1].titulo = nuevaTarea;
+            print("Tarea modificada");
+          } else {
+            print("Modificacion cancelada");
+          }
+          break;
+        }
+      } else {
+        print("La tarea ingresada no existe");
+      }
+    }
+  }
+  pausa();
+}
+
+void completarTarea(List<Tarea> lista, List<String> listaH) {
+  if (lista.isEmpty) {
+    print("No existen tareas. Crea una para comenzar a interactuar");
+  } else {
+    for (int i = 0; i < lista.length; i++) {
+      String estado = lista[i].completada ? "x" : " ";
+      print(
+        "${i + 1}. [$estado] (${nombrePrioridad(lista[i].prioridad)}) ${lista[i].titulo}",
+      );
+    }
+    print("=====================================");
+    while (true) {
+      int posicion = validarOpcion("Escoge la tarea completada: ");
+      if (posicion > 0 && posicion < lista.length + 1) {
+        if (lista[posicion - 1].completada) {
+          print("La tarea seleccionada ya esta completada");
+        } else {
+          if (confirmar()) {
+            lista[posicion - 1].completada = true;
+            listaH.add("[COMPLETADO] ${lista[posicion - 1].titulo}");
+            print("Tarea marcada como completada");
+          }
+        }
+        break;
+      } else {
+        print("La tarea ingresada no existe");
+      }
+    }
+  }
+  pausa();
+}
