@@ -9,8 +9,17 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-      home: Scaffold(body: Center(child: Text('Hola planificador'))),
+    return MaterialApp(
+      home: Scaffold(
+        body: Row(
+          children: [
+            Container(width: 220, height: 100, color: Colors.blueGrey.shade100),
+            const Expanded(
+              child: Center(child: Text('Planificador de Tareas')),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
