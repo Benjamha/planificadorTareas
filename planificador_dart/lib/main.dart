@@ -12,8 +12,9 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       home: Scaffold(
         body: Row(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Container(width: 220, height: 100, color: Colors.blueGrey.shade100),
+            Container(width: 220, color: Colors.blueGrey.shade100),
             const Expanded(
               child: Center(child: Text('Planificador de Tareas')),
             ),
