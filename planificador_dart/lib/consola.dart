@@ -1,5 +1,7 @@
 import 'dart:io';
 
+import 'clases.dart';
+
 class Tarea {
   String titulo;
   bool completada;
