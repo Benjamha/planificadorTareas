@@ -9,7 +9,7 @@ class Tarea {
 
   Tarea({required this.titulo, this.completada = false, this.prioridad = 2});
 
-  bool get tituloValido {
+  bool tituloValido() {
     if (titulo.trim().isNotEmpty) {
       return true;
     }
@@ -17,7 +17,7 @@ class Tarea {
     return false;
   }
 
-  String get nombrePrioridad {
+  String nombrePrioridad() {
     if (prioridad == 3) {
       return "Alta";
     } else if (prioridad == 2) {
@@ -166,6 +166,131 @@ class gestorTarea {
         );
       }
       print("=====================================");
+    }
+    pausa();
+  }
+
+  void crearTarea() {
+    print("=====================================");
+    stdout.write("Nueva tarea: ");
+    String nuevaTarea = stdin.readLineSync() ?? '';
+    if (tituloValido(nuevaTarea)) {
+      int prioridad = asignarPrioridad();
+      lista.add(Tarea(titulo: nuevaTarea, prioridad: prioridad));
+      historial.add("[CREADO] $nuevaTarea");
+      print("Tarea añadida");
+      print("=====================================");
+    }
+    pausa();
+  }
+
+  void eliminarTarea() {
+    if (lista.isEmpty) {
+      print("No hay tareas para eliminar");
+    } else {
+      for (int i = 0; i < lista.length; i++) {
+        String estado = lista[i].completada ? "x" : " ";
+        print(
+          "${i + 1}. [$estado] (${nombrePrioridad(lista[i].prioridad)}) ${lista[i].titulo}",
+        );
+      }
+      print("=====================================");
+      while (true) {
+        int posicion = validarOpcion("Escoge la tarea a eliminar: ");
+        if (posicion > 0 && posicion < lista.length + 1) {
+          if (confirmar()) {
+            historial.add("[ELIMINADO] ${lista[posicion - 1].titulo}");
+            lista.removeAt(posicion - 1);
+            print("Tarea eliminada");
+          } else {
+            print("Eliminacion cancelada");
+          }
+          break;
+        } else {
+          print("La tarea ingresada no existe");
+        }
+      }
+    }
+    print("=====================================");
+    pausa();
+  }
+
+  void modificarTarea() {
+    if (lista.isEmpty) {
+      print("No hay tareas para modificar");
+    } else {
+      for (int i = 0; i < lista.length; i++) {
+        String estado = lista[i].completada ? "x" : " ";
+        print(
+          "${i + 1}. [$estado] (${nombrePrioridad(lista[i].prioridad)}) ${lista[i].titulo}",
+        );
+      }
+      print("=====================================");
+      while (true) {
+        int posicion = validarOpcion("Escoge la tarea a modificar: ");
+        if (posicion > 0 && posicion < lista.length + 1) {
+          stdout.write("Ingrese la nueva tarea: ");
+          String nuevaTarea = stdin.readLineSync() ?? '';
+          if (tituloValido(nuevaTarea)) {
+            if (confirmar()) {
+              historial.add(
+                "[MODIFICADO] ${lista[posicion - 1].titulo} -> $nuevaTarea",
+              );
+              lista[posicion - 1].titulo = nuevaTarea;
+              print("Tarea modificada");
+            } else {
+              print("Modificacion cancelada");
+            }
+            break;
+          }
+        } else {
+          print("La tarea ingresada no existe");
+        }
+      }
+    }
+    pausa();
+  }
+
+  void completarTarea() {
+    if (lista.isEmpty) {
+      print("No existen tareas. Crea una para comenzar a interactuar");
+    } else {
+      for (int i = 0; i < lista.length; i++) {
+        String estado = lista[i].completada ? "x" : " ";
+        print(
+          "${i + 1}. [$estado] (${nombrePrioridad(lista[i].prioridad)}) ${lista[i].titulo}",
+        );
+      }
+      print("=====================================");
+      while (true) {
+        int posicion = validarOpcion("Escoge la tarea completada: ");
+        if (posicion > 0 && posicion < lista.length + 1) {
+          if (lista[posicion - 1].completada) {
+            print("La tarea seleccionada ya esta completada");
+          } else {
+            if (confirmar()) {
+              lista[posicion - 1].completada = true;
+              historial.add("[COMPLETADO] ${lista[posicion - 1].titulo}");
+              print("Tarea marcada como completada");
+            }
+          }
+          break;
+        } else {
+          print("La tarea ingresada no existe");
+        }
+      }
+    }
+    pausa();
+  }
+
+  void verHistorial() {
+    if (historial.isEmpty) {
+      print("Historial vacio");
+    } else {
+      print("HISTORIAL");
+      for (int i = 0; i < historial.length; i++) {
+        print(historial[i]);
+      }
     }
     pausa();
   }
