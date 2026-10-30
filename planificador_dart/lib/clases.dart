@@ -120,7 +120,7 @@ class gestorTarea {
       for (int i = 0; i < lista.length; i++) {
         String estado = lista[i].completada ? "x" : " ";
         print(
-          "${i + 1}. [$estado] (${nombrePrioridad(lista[i].prioridad)}) ${lista[i].titulo}",
+          "${i + 1}. [$estado] (${lista[i].nombrePrioridad()}) ${lista[i].titulo}",
         );
       }
       print("=====================================");
@@ -129,17 +129,18 @@ class gestorTarea {
           "Ingrese tarea a la que quiera cambiar prioridad: ",
         );
         if (posicion > 0 && posicion < lista.length + 1) {
-          String anterior = nombrePrioridad(lista[posicion - 1].prioridad);
-          int nuevaPrioridad = asignarPrioridad();
+          Tarea t = lista[posicion - 1];
+          int prioridadAnterior = t.prioridad;
+          String anterior = t.nombrePrioridad();
+          t.asignarPrioridad();
           if (confirmar()) {
-            lista[posicion - 1].prioridad = nuevaPrioridad;
-            String nueva = nombrePrioridad(lista[posicion - 1].prioridad);
             historial.add(
-              "[PRIORIDAD] ${lista[posicion - 1].titulo}: $anterior -> $nueva",
+              "[PRIORIDAD] ${t.titulo}: $anterior -> ${t.nombrePrioridad()}",
             );
             print("Prioridad actualizada");
             break;
           } else {
+            t.prioridad = prioridadAnterior;
             print("Cambio de prioridad cancelado");
             break;
           }
@@ -162,7 +163,7 @@ class gestorTarea {
       for (int i = 0; i < lista.length; i++) {
         String estado = lista[i].completada ? "x" : " ";
         print(
-          "${i + 1}. [$estado] (${nombrePrioridad(lista[i].prioridad)}) ${lista[i].titulo}",
+          "${i + 1}. [$estado] (${(lista[i].nombrePrioridad())}) ${lista[i].titulo}",
         );
       }
       print("=====================================");
@@ -174,10 +175,11 @@ class gestorTarea {
     print("=====================================");
     stdout.write("Nueva tarea: ");
     String nuevaTarea = stdin.readLineSync() ?? '';
-    if (tituloValido(nuevaTarea)) {
-      int prioridad = asignarPrioridad();
-      lista.add(Tarea(titulo: nuevaTarea, prioridad: prioridad));
-      historial.add("[CREADO] $nuevaTarea");
+    Tarea nueva = Tarea(titulo: nuevaTarea);
+    if (nueva.tituloValido()) {
+      nueva.asignarPrioridad();
+      lista.add(nueva);
+      historial.add("[CREADO] ${nueva.titulo}");
       print("Tarea añadida");
       print("=====================================");
     }
@@ -191,7 +193,7 @@ class gestorTarea {
       for (int i = 0; i < lista.length; i++) {
         String estado = lista[i].completada ? "x" : " ";
         print(
-          "${i + 1}. [$estado] (${nombrePrioridad(lista[i].prioridad)}) ${lista[i].titulo}",
+          "${i + 1}. [$estado] (${(lista[i].nombrePrioridad())}) ${lista[i].titulo}",
         );
       }
       print("=====================================");
@@ -222,7 +224,7 @@ class gestorTarea {
       for (int i = 0; i < lista.length; i++) {
         String estado = lista[i].completada ? "x" : " ";
         print(
-          "${i + 1}. [$estado] (${nombrePrioridad(lista[i].prioridad)}) ${lista[i].titulo}",
+          "${i + 1}. [$estado] (${(lista[i].nombrePrioridad())}) ${lista[i].titulo}",
         );
       }
       print("=====================================");
@@ -231,7 +233,7 @@ class gestorTarea {
         if (posicion > 0 && posicion < lista.length + 1) {
           stdout.write("Ingrese la nueva tarea: ");
           String nuevaTarea = stdin.readLineSync() ?? '';
-          if (tituloValido(nuevaTarea)) {
+          if (Tarea(titulo: nuevaTarea).tituloValido()) {
             if (confirmar()) {
               historial.add(
                 "[MODIFICADO] ${lista[posicion - 1].titulo} -> $nuevaTarea",
@@ -258,7 +260,7 @@ class gestorTarea {
       for (int i = 0; i < lista.length; i++) {
         String estado = lista[i].completada ? "x" : " ";
         print(
-          "${i + 1}. [$estado] (${nombrePrioridad(lista[i].prioridad)}) ${lista[i].titulo}",
+          "${i + 1}. [$estado] (${(lista[i].nombrePrioridad())}) ${lista[i].titulo}",
         );
       }
       print("=====================================");

@@ -2,14 +2,6 @@ import 'dart:io';
 
 import 'clases.dart';
 
-class Tarea {
-  String titulo;
-  bool completada;
-  int prioridad;
-
-  Tarea({required this.titulo, this.completada = false, this.prioridad = 1});
-}
-
 bool login() {
   print('LOGIN');
   for (int i = 0; i < 3; i++) {
@@ -46,14 +38,6 @@ int validarOpcion(String mensaje) {
   }
 }
 
-bool tituloValido(String titulo) {
-  if (titulo.trim().isNotEmpty) {
-    return true;
-  }
-  print("El titulo ingresado no es valido");
-  return false;
-}
-
 bool confirmar() {
   while (true) {
     stdout.write("¿Estas seguro? y/n");
@@ -69,28 +53,6 @@ bool confirmar() {
     } else {
       print("Ingresar 'y' como si o 'n' como no");
     }
-  }
-}
-
-String nombrePrioridad(int p) {
-  if (p == 3) {
-    return "Alta";
-  } else if (p == 2) {
-    return "Media";
-  } else {
-    return "Baja";
-  }
-}
-
-int asignarPrioridad() {
-  while (true) {
-    int p = validarOpcion(
-      "Asignar prioridad (1 = Baja, 2 = Media, 3 = Alta): ",
-    );
-    if (p >= 1 && p <= 3) {
-      return p;
-    }
-    print("La prioridad puede ser unicamente de 1, 2 o 3");
   }
 }
 
