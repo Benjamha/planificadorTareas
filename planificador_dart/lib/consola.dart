@@ -40,7 +40,7 @@ int validarOpcion(String mensaje) {
 
 bool confirmar() {
   while (true) {
-    stdout.write("¿Estas seguro? y/n");
+    stdout.write("¿Estas seguro? y/n: ");
     String conf = stdin.readLineSync() ?? '';
     if (conf.isEmpty) {
       continue;
